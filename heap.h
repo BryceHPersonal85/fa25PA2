@@ -21,7 +21,7 @@ struct MinHeap {
             return;
         }
 
-        weightArr[size] = idx;
+        data[size] = idx;
         size++;
         upheap(size-1,weightArr);
     }
@@ -34,17 +34,11 @@ struct MinHeap {
             return -1;
         }
 
-        int rootIndex = weightArr[0]; //find the root index
-        for (int i = 1; i < size; i++) {
-            if (weightArr[i] < rootIndex) {
-                rootIndex = weightArr[i];
-            }
-        }
-        //replace root with last element
-        weightArr[size-1] = rootIndex;
+        int ogRoot = data[0];
+        data[0] = data[size-1];
         size--;
-        downheap(size-1,weightArr);
-        return rootIndex;
+        downheap(0,weightArr);
+        return ogRoot;
     }
 
     void upheap(int pos, int weightArr[]) {
