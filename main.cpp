@@ -91,17 +91,38 @@ int createLeafNodes(int freq[]) {
 int buildEncodingTree(int nextFree) {
     // TODO:
     // 1. Create a MinHeap object.
-
-
+    MinHeap minHeap = MinHeap();
 
     // 2. Push all leaf node indices into the heap.
+    for (int i=0; i < nextFree; i++) {
+        if (weightArr[i] > 0){
+            minHeap.push(i, weightArr);
+        }
+    }
+
     // 3. While the heap size is greater than 1:
-    //    - Pop two smallest nodes
-    //    - Create a new parent node with combined weight
-    //    - Set left/right pointers
-    //    - Push new parent index back into the heap
+    while (minHeap.size > 1) {
+
+        //    - Pop two smallest nodes
+        int weight1 = minHeap.pop(weightArr);
+        int weight2 = minHeap.pop(weightArr);
+
+
+        //    - Set left/right pointers
+        int parent = nextFree;
+        leftArr[parent] = weight1;
+        rightArr[parent] = weight2;
+
+        //    - Create a new parent node with combined weight
+        weightArr[parent] = weightArr[weight1] + weightArr[weight2];
+
+        //    - Push new parent index back into the heap
+        minHeap.push(parent, weightArr);
+        nextFree++;
+    }
+
     // 4. Return the index of the last remaining node (root)
-    return -1; // placeholder
+    return minHeap.pop(weightArr);
 }
 
 // Step 4: Use an STL stack to generate codes
@@ -111,7 +132,7 @@ void generateCodes(int root, string codes[]) {
     // Left edge adds '0', right edge adds '1'.
     // Record code when a leaf node is reached.
 
-
+    stack<pair<int, string>>;
 }
 
 // Step 5: Print table and encoded message
