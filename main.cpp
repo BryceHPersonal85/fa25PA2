@@ -100,13 +100,19 @@ int buildEncodingTree(int nextFree) {
         }
     }
 
+    //edgecases thing 1 and thing 2
+    if (minHeap.size == 0) {
+        return -1;
+    }
+    if (minHeap.size == 1) {
+        return minHeap.pop(weightArr);
+    }
+
     // 3. While the heap size is greater than 1:
     while (minHeap.size > 1) {
-
         //    - Pop two smallest nodes
         int weight1 = minHeap.pop(weightArr);
         int weight2 = minHeap.pop(weightArr);
-
 
         //    - Set left/right pointers
         int parent = nextFree;
@@ -133,7 +139,6 @@ void generateCodes(int root, string codes[]) {
     // Record code when a leaf node is reached.
 
     if (root == -1) { //edgecase
-        cout << "Nothing to work with." << endl;
         return;
     }
 
@@ -141,7 +146,7 @@ void generateCodes(int root, string codes[]) {
     stackWork.push(make_pair(root, ""));
 
     //leaf
-    while (stackWork.size() > 0 ) {
+    while (stackWork.size() > 0) {
         pair<int, string> p = stackWork.top();
         stackWork.pop();
 

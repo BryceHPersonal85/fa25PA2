@@ -16,7 +16,7 @@ struct MinHeap {
 
     void push(int idx, int weightArr[]) {
         // TODO: insert index at end of heap, restore order using upheap()
-        if (size == 64) { //edgecase
+        if (size >= 64) { //edgecase
             cout<<"Cannot push, array full."<<endl;
             return;
         }
@@ -33,7 +33,6 @@ struct MinHeap {
             cout<<"Cannot pop, array empty."<<endl;
             return -1;
         }
-
         int ogRoot = data[0];
         data[0] = data[size-1];
         size--;
@@ -42,44 +41,52 @@ struct MinHeap {
     }
 
     void upheap(int pos, int weightArr[]) {
-        if (size <=1) { //edgecase
-            cout << "Nothing to upheap." <<endl;
-            return;
-        }
-
         // TODO: swap child upward while smaller than parent
-        while (weightArr[pos] < weightArr[(pos-1)/2] &&  pos > 1){
-            int parent = (pos-1)/2;
-            int tempSwap = weightArr[pos];
+
+        int child = pos;
+        while (child > 0) {
+            int parent = (child - 1) / 2; //formula for parent
+            if (weightArr[data[parent]] <= weightArr[data[child]]) {
+                break; //already minheap
+            }
 
             //swap
-            weightArr[pos] = weightArr[parent];
-            weightArr[parent] = tempSwap;
-            pos = parent;
+            int temp = data[parent];
+            data[parent] = data[child];
+            data[child] = temp;
+            child = parent;
         }
     }
 
     void downheap(int pos, int weightArr[]) {
         // TODO: swap parent downward while larger than any child
-        if (size <=1) { //edgecase
-            cout << "Nothing to downheap." <<endl;
+
+        if (pos < 0 || pos >= size) { //edgecase
             return;
         }
 
-        int child; //to be assigned
-        while ((weightArr[pos] > weightArr[(2*pos)+1] || weightArr[pos] > weightArr[(2*pos)+2]) && pos < size) {
-            //determine smaller child to be swapped with
-            if (weightArr[(2*pos)+1] > weightArr[(2*pos)+2]) {
-                child = weightArr[(2*pos)+2];
+        int parent = pos;
+        while (((2 * parent) + 1) < size) {
+            int childL = (2 * parent) + 1; //child formula (haha like the liquid)
+            int childR = (2 * parent) + 2; //child formula
+
+            int smallest;
+
+            if ((weightArr[data[childR]] < weightArr[data[childL]]) && (childR < size)){
+                smallest = childR; //right smaller
             }else {
-                child = weightArr[(2*pos)+1];
+                smallest = childL; //left smaller
+            }
+
+            if (weightArr[data[parent]] <= weightArr[data[smallest]]) {
+                break; //already minheap
             }
 
             //swap
-            int tempSwap = weightArr[pos];
-            weightArr[pos] = weightArr[child];
-            weightArr[child] = tempSwap;
-            pos = child;
+            int temp = data[parent];
+            data[parent] = data[smallest];
+            data[smallest] = temp;
+            parent = smallest;
         }
     }
 };
