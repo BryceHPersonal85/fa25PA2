@@ -132,7 +132,42 @@ void generateCodes(int root, string codes[]) {
     // Left edge adds '0', right edge adds '1'.
     // Record code when a leaf node is reached.
 
-    stack<pair<int, string>>;
+    if (root == -1) { //edgecase
+        cout << "Nothing to work with." << endl;
+        return;
+    }
+
+    stack<pair<int, string>> stackWork;
+    stackWork.push(make_pair(root, ""));
+
+    //leaf
+    while (stackWork.size() > 0 ) {
+        pair<int, string> p = stackWork.top();
+        stackWork.pop();
+
+        int nodeInd = p.first;
+        string path = p.second;
+
+        int left = leftArr[nodeInd];
+        int right = rightArr[nodeInd];
+
+        if (left == -1 && right == -1) { // leaf conditional
+            int letInd = charArr[nodeInd] - 'a';
+            if (path == ""){
+                codes[letInd] = "0";
+            }
+            else {
+                codes[letInd] = path;
+            }
+        }
+
+        if (right != -1) { //right child exists
+            stackWork.push(make_pair(right, path + "1"));
+        }
+        if (left != -1) { //left child exists
+            stackWork.push(make_pair(left, path + "0"));
+        }
+    }
 }
 
 // Step 5: Print table and encoded message
